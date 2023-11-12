@@ -1,104 +1,59 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-struct User {
-    char firstName[30];
-    char lastName[30];
+struct login
+{
+    char fname[30];
+    char lname[30];
     char username[30];
     char password[20];
 };
 
-void registration() {
-    FILE *reg;
+int main(void)
+{
+    struct login l;
+    bool f;
+    int active;
 
-    reg = fopen("reg.txt", "w");
-    if (reg == nullptr) {
-        fputs("Error at opening File!", stderr);
-        return;
-    }
+    printf("\nEnter the Activation: ");
+    scanf("%d", &active);
 
-    struct User u{};
-
-    printf("\nEnter First Name: ");
-    fgets(u.firstName, 30, stdin);
-    u.firstName[strcspn(u.firstName, "\n")] = '\0';
-
-    printf("\nEnter last name: ");
-    fgets(u.lastName, 30, stdin);
-    u.lastName[strcspn(u.lastName, "\n")] = '\0';
+    f = active;
 
     printf("\nEnter Username: ");
-    fgets(u.username, 30, stdin);
-    u.username[strcspn(u.username, "\n")] = '\0';
+    scanf("%s", l.username);
 
     printf("\nEnter Password: ");
-    fgets(u.password, 20, stdin);
-    u.password[strcspn(u.password, "\n")] = '\0';
+    scanf("%s", l.password);
 
-    fwrite(&u, sizeof(u), 1, reg);
-    fclose(reg);
-
-    printf("\nRegistration Successful!!\n");
-    printf("Press enter to continue!!'\n");
     getchar();
-}
 
-void login() {
-    struct User u{};
-    char username[30], password[20];
-    FILE *reg;
+    if (f)
+    {
+        char usernamee[30], passwordd[20];
 
-    reg = fopen("reg.txt", "r");
-    if (reg == nullptr) {
-        fputs("Error at opening File!!", stderr);
-        return;
-    }
+        printf("\nPlease Enter your login credentials below\n\n");
+        printf("Username:  ");
+        scanf("%s", usernamee);
 
-    printf("\nEnter your credentials, please.");
-    printf("\nUsername: ");
-    fgets(username, 30, stdin);
-    username[strcspn(username, "\n")] = '\0';
+        printf("\nPassword: ");
+        printf("\n");
+        scanf("%s", passwordd);
 
-    printf("\nPassword: ");
-    fgets(password, 20, stdin);
-    password[strcspn(password, "\n")] = '\0';
+        int r1 = strcmp(usernamee, l.username);
+        int r2 = strcmp(passwordd, l.password);
 
-    while (fread(&u, sizeof(u), 1, reg)) {
-        if (strcmp(username, u.username) == 0 && strcmp(password, u.password) == 0) {
-            printf("\nSuccessful Login!!\n");
-            printf("Hello, %s %s\n", u.firstName, u.lastName);
-        } else {
-            printf("\nWrong Username or Password\n");
+        if (r1 == 0 && r2 == 0)
+        {
+            printf("\nSuccessful Login\n");
+        }
+        else
+        {
+            printf("\nLogin Failed\n");
         }
     }
 
-    fclose(reg);
-}
-
-int main() {
-    char input[10];
-    int num;
-
-    while (true) {
-        printf("Press '1' to Register");
-        printf("\nPress '2' to Login");
-        printf("\nPress '3' to close the application\n");
-
-        fgets(input, 10, stdin);
-
-        num = strtol(input, nullptr, 10);
-
-        if (num == 1) {
-            registration();
-        } else if (num == 2) {
-            login();
-            return 0;
-        } else if (num == 3) {
-            printf("Bye Bye!!\n");
-            return 0;
-        } else {
-            printf("Invalid Input. Try again:\n");
-        }
-    }
+    return 0;
 }
